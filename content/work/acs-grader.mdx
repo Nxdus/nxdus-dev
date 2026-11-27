@@ -1,22 +1,22 @@
-ACS Grader is the contest platform used for ACS First Meet, a programming event run by the Applied Computer Science program at KMUTT. Contestants write code in the browser, submit it, and get scored automatically on a live leaderboard.
+ACS Grader is the contest platform used for ACS First Meet, a programming event run by the Applied Computer Science program at KMUTT. Contestants write and submit code in the browser. The platform grades submissions automatically and posts scores to a live leaderboard.
 
 ## Why
 
-The event needed a grader the program could run itself: its own problems, its own schedule, and no dependence on a third-party judge with someone else's accounts and limits.
+The event needed a contest platform that the program could run itself, with control over the problems, schedule, and grading setup.
 
 ## What I built
 
-- **Contests and a problem archive**, each problem with allowed languages, a score and hidden test cases.
-- **An in-browser editor** (Monaco) with a run-against-sample button before the real submission.
-- **Sandboxed execution through Judge0.** Submissions never run on the app server; Judge0 executes them in isolation and reports per-case results.
-- **Scheduling and a leaderboard.** Contests open and close on a cron schedule, and scores freeze when a contest finishes.
-- **An admin area** for contests, problems, users and reviewing individual submissions.
-- **Sign-in** with Google, GitHub or email with verification, built on Better Auth.
+- **Contests and a problem archive.** Each contest problem defines the allowed languages, maximum score, and hidden test cases.
+- **Browser-based code editor.** Write code in Monaco and run it against sample cases before submitting.
+- **Sandboxed grading.** Judge0 runs submissions in isolation and returns a result for each test case.
+- **Contest scheduling and leaderboard.** Contests open and close on schedule. Contestants can follow scores on the live leaderboard.
+- **Admin dashboard.** Manage contests, problems, and users, and review individual submissions.
+- **Sign-in.** Better Auth supports Google, GitHub, and verified email addresses.
 
-## Hard parts
+## Technical challenges
 
-**Fair partial scoring.** Every problem uses a fixed number of test cases and scores are proportional to the cases passed, rounded down. That keeps results comparable across problems with different maximum scores.
+**Partial scoring.** Each contest problem awards a share of its maximum score based on the fraction of test cases passed. The grader rounds the result down to a whole point.
 
-**Writing test cases is slow.** Organizers can generate test cases with an LLM through OpenRouter, with a fallback model when the first one fails, and then review them before publishing.
+**Drafting test cases.** Organizers can generate and review draft test cases before publishing. If the first model fails, the app tries a fallback model through OpenRouter.
 
-**Shipping it.** The app builds into a standalone Docker image published by GitHub Actions, so deploying a new version is a single image pull.
+**Packaging releases.** GitHub Actions builds and publishes a standalone Docker image for deployment.

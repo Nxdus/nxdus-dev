@@ -19,7 +19,9 @@ export async function generateMetadata({
   params,
 }: PageProps<"/work/[slug]">): Promise<Metadata> {
   const work = getWork((await params).slug);
-  return work ? { title: work.title, description: work.description } : {};
+  return work
+    ? { title: work.title, description: work.description }
+    : { title: "Case study not found" };
 }
 
 export default function WorkPage({ params }: PageProps<"/work/[slug]">) {
@@ -34,7 +36,7 @@ export default function WorkPage({ params }: PageProps<"/work/[slug]">) {
         render={<Link href="/" />}
       >
         <ArrowLeftIcon data-icon="inline-start" />
-        Back
+        Back to home
       </Button>
 
       <Suspense fallback={<WorkDetailsSkeleton />}>

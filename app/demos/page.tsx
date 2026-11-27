@@ -15,16 +15,18 @@ import {
 } from "@/components/ui/card";
 import {
   Empty,
-  EmptyDescription,
+  EmptyContent,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
 import { mediaUrl, sortedDemos } from "@/content/demos";
 
+const description = "Short demos of web apps, Roblox games, and 3D projects.";
+
 export const metadata: Metadata = {
   title: "Demos",
-  description: "Short clips of web apps, Roblox games and 3D work in progress.",
+  description,
 };
 
 const order = (i: number) => ({ "--i": i }) as React.CSSProperties;
@@ -49,13 +51,13 @@ export default function DemosPage() {
         render={<Link href="/" />}
       >
         <ArrowLeftIcon data-icon="inline-start" />
-        Back
+        Back to home
       </Button>
 
       <header className="reveal" style={order(1)}>
         <h1 className="font-medium">Demos</h1>
         <p className="text-muted-foreground">
-          Short clips of web apps, Roblox games and 3D work in progress.
+          {description}
         </p>
       </header>
 
@@ -66,8 +68,12 @@ export default function DemosPage() {
               <ClapperboardIcon />
             </EmptyMedia>
             <EmptyTitle>No demos yet</EmptyTitle>
-            <EmptyDescription>Clips are on the way.</EmptyDescription>
           </EmptyHeader>
+          <EmptyContent>
+            <Button variant="outline" size="sm" nativeButton={false} render={<Link href="/#work" />}>
+              Browse selected work
+            </Button>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="flex flex-col gap-6">

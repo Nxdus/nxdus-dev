@@ -12,7 +12,7 @@ export const works: Work[] = [
   {
     slug: "lomra",
     title: "Lomra",
-    description: "Local-first AI canvas for images, video and 3D",
+    description: "Local-first AI canvas for images, video, and 3D",
     year: "2026",
     stack: ["Electron", "Next.js", "Three.js", "Ollama", "Whisper"],
     links: [{ label: "GitHub", href: "https://github.com/Nxdus/lomra-app" }],
@@ -20,11 +20,11 @@ export const works: Work[] = [
   {
     slug: "acs-grader",
     title: "ACS Grader",
-    description: "Programming contest and auto-grading platform",
+    description: "Programming contests with automated grading",
     year: "2026",
     stack: ["Next.js", "Prisma", "PostgreSQL", "Judge0", "Better Auth"],
     links: [
-      { label: "Live", href: "https://acs.nxdus.space" },
+      { label: "Open ACS Grader", href: "https://acs.nxdus.space" },
       { label: "GitHub", href: "https://github.com/Nxdus/acs-grader" },
     ],
   },
@@ -38,21 +38,21 @@ export const works: Work[] = [
   {
     slug: "krk-story",
     title: "KRK Story",
-    description: "Minecraft server and launcher pack manager",
+    description: "Minecraft server control and modpack distribution",
     year: "2026",
     stack: ["Next.js", "Express", "Docker", "Prisma", "PostgreSQL"],
   },
   {
     slug: "slipio",
     title: "Slipio",
-    description: "Payment-slip OCR with Google Sheets export",
+    description: "Thai bank slip OCR and Google Sheets export",
     year: "2026",
     stack: ["Next.js", "NestJS", "PaddleOCR", "PostgreSQL"],
   },
   {
     slug: "langkrua",
     title: "Langkrua",
-    description: "Kitchen stock, recipe costing and orders on LINE",
+    description: "LINE app for kitchen inventory, recipe costs, and orders",
     year: "2026",
     stack: ["Next.js", "LINE LIFF", "Prisma", "Stripe"],
   },
