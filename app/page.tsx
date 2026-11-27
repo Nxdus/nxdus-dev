@@ -1,4 +1,5 @@
 import { ArrowUpRightIcon, ClapperboardIcon, MailIcon } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { experience, site } from "@/content/site";
 import { works } from "@/content/work";
+
+export const metadata: Metadata = {
+  title: `${site.name} · Full-Stack Developer`,
+};
 
 const order = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
@@ -39,7 +44,7 @@ export default function Home() {
 
       <Separator className="reveal" style={order(1)} />
 
-      <section className="reveal flex flex-col gap-3" style={order(1)}>
+      <section id="work" className="reveal flex flex-col gap-3" style={order(1)}>
         <h2 className="text-muted-foreground">Work</h2>
         <ItemGroup className="-mx-3 gap-0">
           {works.map((work) => (
@@ -53,7 +58,7 @@ export default function Home() {
                 <ViewTransition name={`work-title-${work.slug}`}>
                   <ItemTitle>{work.title}</ItemTitle>
                 </ViewTransition>
-                <ItemDescription className="line-clamp-1">
+                <ItemDescription className="line-clamp-none">
                   {work.description}
                 </ItemDescription>
               </ItemContent>
@@ -71,13 +76,9 @@ export default function Home() {
         <h2 className="text-muted-foreground">Experience</h2>
         <ItemGroup className="-mx-3 gap-0">
           {experience.map((item) => (
-            <Item key={`${item.org}-${item.role}`} role="listitem" size="sm">
-              <ItemContent>
-                <ItemTitle>
-                  {item.role}
-                  <span className="text-muted-foreground">at</span>
-                  {item.org}
-                </ItemTitle>
+            <Item key={item.title} role="listitem" size="sm">
+              <ItemContent className="min-w-0">
+                <ItemTitle>{item.title}</ItemTitle>
                 <ItemDescription className="line-clamp-none">
                   {item.summary}
                 </ItemDescription>

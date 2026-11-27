@@ -1,19 +1,19 @@
-Slipio reads Thai bank-transfer slips. Upload a batch of slip images, review what OCR extracted, and export the transactions to your own Google Sheet with the receipts saved to Drive.
+Slipio reads Thai bank transfer slips. Upload a batch of slip images, review the extracted details, and export transactions to Google Sheets. You can also save the slip images to Google Drive.
 
 ## Why
 
-Small shops confirm payments by reading slips one at a time and typing amounts into a spreadsheet. It is slow and easy to get wrong. Slipio does the reading and leaves a person to check the result.
+I built Slipio to reduce manual entry for shops that track payments in spreadsheets. It reads each slip and gives a person a chance to correct the results before export.
 
 ## What I built
 
-- **An OCR pipeline:** the Next.js frontend uploads slips to a NestJS API, which passes them to a PaddleOCR service running in its own container.
-- **A review step** where every extracted field can be corrected before anything is exported.
-- **Google integration:** sign in with Google, link one or more Sheets, and export reviewed transactions there, with receipt images stored in Drive.
+- **OCR pipeline.** The Next.js frontend uploads slips to a NestJS API, which forwards them to a separate PaddleOCR service.
+- **Review step.** Check and correct extracted fields before export.
+- **Google integration.** Link one or more spreadsheets, export reviewed transactions, and choose a Google Drive folder for the slip images.
 
-## Hard parts
+## Technical challenges
 
-**Asking for as little access as possible.** Slipio only uses Drive's per-file scope, so it can reach the sheets the user picked and nothing else. OAuth tokens stay on the server in encrypted HttpOnly cookies and are never exposed to client code.
+**Requesting Google permissions.** Slipio requests Google Sheets access to export transactions and per-file Google Drive access to save slip images. OAuth tokens are stored in an encrypted, HttpOnly session cookie and read by server-side code.
 
-**Settings that follow the account.** Linked sheets and export settings are stored in PostgreSQL by Google's stable account ID. Signing in on another device restores them, and older cookie-based settings migrate automatically on the next request.
+**Restoring settings across devices.** Slipio stores linked spreadsheets and export settings in PostgreSQL under the user's Google account ID. Signing in on another device restores those settings.
 
-**Keeping accounts apart.** The export logic and account isolation have automated tests, because a slip from one shop showing up in another shop's sheet would be the worst possible bug.
+**Keeping accounts separate.** Automated tests check that exports use the spreadsheets linked to the signed-in account.

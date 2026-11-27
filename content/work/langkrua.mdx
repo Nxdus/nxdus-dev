@@ -1,21 +1,21 @@
-Langkrua is a back-of-house app for small food businesses. Owners track ingredient stock, cost their recipes, price their menu and record daily orders, all inside LINE.
+Langkrua is a LINE app for small food businesses. Owners track ingredient stock, calculate recipe costs, set menu prices, and record daily orders.
 
 ## Why
 
-Small kitchens price dishes by feel and find out about thin margins at the end of the month. Most of them already run their business through LINE, so the app lives there instead of asking them to install something new.
+I built Langkrua to help small food businesses use ingredient costs when setting menu prices. Owners and staff can open the shared workspace from LINE.
 
 ## What I built
 
-- **Inventory** with units, package-based pricing and low-stock alerts sent as LINE messages that link straight to the ingredient.
-- **Recipe costing** from linked ingredients, including gas or electricity cost, batch yield, target margin and delivery-app commission.
-- **Daily orders and reports:** revenue, cost, commission and profit by day, week, month or a custom range.
-- **Shared kitchens:** an owner creates a workspace, staff join with a six-character code, and the owner sets view or manage access per area.
-- **Subscription plans** with Stripe billing and per-plan feature limits.
+- **Inventory.** Track stock in the units you use, set prices by package, and open ingredient records from low-stock alerts in LINE.
+- **Recipe costing.** Calculate costs from linked ingredients, gas or electricity, and batch yield. Set prices with a target margin and delivery-app commission in mind.
+- **Orders and reports.** Record orders and see revenue, costs, commission, and profit by day, week, month, or a custom date range.
+- **Shared kitchens.** Staff join a workspace with a six-character code. Owners choose which areas staff can view or manage.
+- **Subscriptions.** Stripe handles billing, and each plan comes with its own feature limits.
 
-## Hard parts
+## Technical challenges
 
-**Working well in a mobile LINE browser.** The app is mobile-first and in Thai, runs as a LINE LIFF app, and uses the LINE profile as the identity, so there are no passwords to forget.
+**Working inside LINE.** The mobile-first app runs in Thai through LINE LIFF. Users sign in with their LINE account.
 
-**Sync without a real-time server.** Shared kitchens save changes after a short debounce and poll a sync version every few seconds. Remote updates are only applied when there are no unsaved local edits, so two people editing at once don't overwrite each other's work mid-typing.
+**Keeping shared kitchens in sync.** The app checks for updates every few seconds and holds incoming updates while there are unsaved edits in the same workspace. When you save, the server checks record revisions for conflicts.
 
-**Join codes people can read aloud.** Codes avoid characters that are easy to mix up, like `0` and `O`, because they get shared by voice and in chat.
+**Making join codes easy to share.** Codes omit look-alike characters such as `0` and `O` so staff can share them aloud or in chat.
