@@ -11,7 +11,8 @@ ENV MEDIA_URL=$MEDIA_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN node node_modules/next/dist/bin/next build
+# public/ may be empty, and Git does not keep empty folders.
+RUN mkdir -p public && node node_modules/next/dist/bin/next build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
