@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: { default: site.name, template: `%s · ${site.name}` },
   description: site.intro,
   openGraph: { siteName: site.name, type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
