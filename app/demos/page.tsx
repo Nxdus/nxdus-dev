@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/empty";
 import { mediaUrl, sortedDemos } from "@/content/demos";
 
-const description = "Short demos of web apps, Roblox games, and 3D projects.";
+const description = "Short demos of my web and desktop apps.";
 
 export const metadata: Metadata = {
   title: "Demos",
