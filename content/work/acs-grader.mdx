@@ -1,0 +1,22 @@
+ACS Grader is the contest platform used for ACS First Meet, a programming event run by the Applied Computer Science program at KMUTT. Contestants write code in the browser, submit it, and get scored automatically on a live leaderboard.
+
+## Why
+
+The event needed a grader the program could run itself: its own problems, its own schedule, and no dependence on a third-party judge with someone else's accounts and limits.
+
+## What I built
+
+- **Contests and a problem archive**, each problem with allowed languages, a score and hidden test cases.
+- **An in-browser editor** (Monaco) with a run-against-sample button before the real submission.
+- **Sandboxed execution through Judge0.** Submissions never run on the app server; Judge0 executes them in isolation and reports per-case results.
+- **Scheduling and a leaderboard.** Contests open and close on a cron schedule, and scores freeze when a contest finishes.
+- **An admin area** for contests, problems, users and reviewing individual submissions.
+- **Sign-in** with Google, GitHub or email with verification, built on Better Auth.
+
+## Hard parts
+
+**Fair partial scoring.** Every problem uses a fixed number of test cases and scores are proportional to the cases passed, rounded down. That keeps results comparable across problems with different maximum scores.
+
+**Writing test cases is slow.** Organizers can generate test cases with an LLM through OpenRouter, with a fallback model when the first one fails, and then review them before publishing.
+
+**Shipping it.** The app builds into a standalone Docker image published by GitHub Actions, so deploying a new version is a single image pull.

@@ -1,0 +1,56 @@
+# Coolify: use the "Docker Compose" build pack with this file.
+# Domains (set in Coolify, not here):
+#   web       -> https://nxdus.com        (port 3000)
+#   seaweedfs -> https://media.nxdus.com  (port 8333, S3 API only)
+# Required env: SEAWEEDFS_ACCESS_KEY, SEAWEEDFS_SECRET_KEY.
+name: nxdus-dev
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        MEDIA_URL: ${MEDIA_URL:-https://media.nxdus.com/demos}
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.50
+    restart: unless-stopped
+    environment:
+      SEAWEEDFS_ACCESS_KEY: ${SEAWEEDFS_ACCESS_KEY:?Set SEAWEEDFS_ACCESS_KEY}
+      SEAWEEDFS_SECRET_KEY: ${SEAWEEDFS_SECRET_KEY:?Set SEAWEEDFS_SECRET_KEY}
+    # The S3 config is written at startup so keys stay in env, not in Git.
+    # "anonymous" may only read the "demos" bucket; writes need the admin keys.
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        cat > /tmp/s3.json <<EOF
+        {
+          "identities": [
+            { "name": "anonymous", "actions": ["Read:demos"] },
+            {
+              "name": "admin",
+              "credentials": [
+                { "accessKey": "$${SEAWEEDFS_ACCESS_KEY}", "secretKey": "$${SEAWEEDFS_SECRET_KEY}" }
+              ],
+              "actions": ["Admin", "Read", "List", "Tagging", "Write"]
+            }
+          ]
+        }
+        EOF
+        exec weed server -dir=/data -s3 -s3.port=8333 -s3.config=/tmp/s3.json -volume.max=0
+    # Only the S3 port is meant to be public; master/volume/filer stay internal.
+    expose:
+      - "8333"
+    volumes:
+      - seaweedfs-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9333/cluster/status || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  seaweedfs-data:

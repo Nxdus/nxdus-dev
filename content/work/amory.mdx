@@ -1,0 +1,20 @@
+Amory is a storefront for a game server. Players buy in-game items and services on the store, and the team runs everything from a separate admin app.
+
+## Why
+
+The server was selling through chat messages and manual bank transfers. Every order meant checking a slip, finding the player and granting the item by hand. The goal was a store that takes payment and delivers without anyone in the loop.
+
+## What I built
+
+- **Three deployable apps in one repo:** a customer store and an admin app in Next.js, and a NestJS API between them.
+- **Payments** through LINE Pay and TrueMoney Wallet via a payment gateway, with callbacks that confirm orders automatically.
+- **Transaction reconciliation** in the admin app, so the team can match gateway records against orders.
+- **Accounts with two-factor authentication**, linked to players in the game's own database.
+
+## Hard parts
+
+**Two databases with different owners.** The store keeps its own data in PostgreSQL, while player accounts live in the game server's MySQL. The API is the only thing allowed to touch both, which keeps the game database safe from the web apps.
+
+**Testing payment callbacks locally.** Gateways need a public HTTPS URL to call back. I set up a local workflow where the store runs behind a Tailscale Funnel URL and forwards wallet callbacks to the API on my machine, so the whole payment flow can be tested without deploying.
+
+**Deploying without losing uploads.** The project runs on Coolify with Docker Compose. Uploaded media moved to a persistent volume, with a documented migration so files in the old container weren't lost during redeploys.
