@@ -32,8 +32,8 @@ export default function Home() {
           className="self-start"
           render={<Link href="/demos" />}
         >
-          <ClapperboardIcon data-icon="inline-start" />
           Demos
+          <ClapperboardIcon data-icon="inline-end" />
         </Button>
       </header>
 
