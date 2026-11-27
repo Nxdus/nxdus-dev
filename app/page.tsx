@@ -12,6 +12,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
+import { sortedDemos } from "@/content/demos";
 import { experience, site } from "@/content/site";
 import { works } from "@/content/work";
 
@@ -30,16 +31,19 @@ export default function Home() {
           <p className="text-muted-foreground">@{site.handle}</p>
         </div>
         <p className="text-muted-foreground">{site.intro}</p>
-        <Button
-          variant="outline"
-          size="sm"
-          nativeButton={false}
-          className="self-start"
-          render={<Link href="/demos" />}
-        >
-          Demos
-          <ClapperboardIcon data-icon="inline-end" />
-        </Button>
+        {/* Shown once content/demos.ts has at least one clip. */}
+        {sortedDemos.length > 0 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            nativeButton={false}
+            className="self-start"
+            render={<Link href="/demos" />}
+          >
+            Demos
+            <ClapperboardIcon data-icon="inline-end" />
+          </Button>
+        ) : null}
       </header>
 
       <Separator className="reveal" style={order(1)} />
