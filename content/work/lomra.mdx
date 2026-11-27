@@ -1,0 +1,20 @@
+Lomra is a desktop canvas where images, video and 3D models sit side by side, and AI tools work directly on what is on the board. You drop in references, edit a frame, ask a model for a variation, and the result lands back on the same canvas.
+
+## Why
+
+Creative work with AI usually means juggling a dozen browser tabs and a downloads folder. I wanted one surface where the material and the tools live together, and where nothing has to leave the machine unless you choose a hosted model.
+
+## What I built
+
+- **An infinite canvas** for images, video and GLB models, with cards for briefs, references and outputs, video frame capture, and a 3D model inspector.
+- **A picture editor** on the canvas: arrows, shapes and text, background removal, and mask painting that feeds edit and outpaint models.
+- **Storyboards** with reference sets and shots, generating a clip per shot and stitching them with `ffmpeg`.
+- **Provider routing** to OpenRouter, Fal.ai and Google AI Studio, plus opt-in local runtimes: Ollama for chat and tools, stable-diffusion.cpp for images, Hunyuan3D and TripoSR for 3D, and Whisper for speech-to-text.
+
+## Hard parts
+
+**Running a web app as a desktop app.** The UI is a Next.js standalone server started by Electron. The renderer talks to the main process only through a sandboxed preload bridge, and API keys are stored with the OS keychain through `safeStorage` rather than in plain files.
+
+**Local models that behave offline.** Each runtime is opt-in, downloads are checked against SHA-256 hashes, and the 3D worker runs with Hugging Face's offline mode so a missing network never stalls a generation.
+
+**Testing a desktop app.** Both the Electron side and the frontend have their own test suites run with `bun test`, and CI builds the Windows installer from release tags.

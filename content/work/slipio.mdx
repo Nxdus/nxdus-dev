@@ -1,0 +1,19 @@
+Slipio reads Thai bank-transfer slips. Upload a batch of slip images, review what OCR extracted, and export the transactions to your own Google Sheet with the receipts saved to Drive.
+
+## Why
+
+Small shops confirm payments by reading slips one at a time and typing amounts into a spreadsheet. It is slow and easy to get wrong. Slipio does the reading and leaves a person to check the result.
+
+## What I built
+
+- **An OCR pipeline:** the Next.js frontend uploads slips to a NestJS API, which passes them to a PaddleOCR service running in its own container.
+- **A review step** where every extracted field can be corrected before anything is exported.
+- **Google integration:** sign in with Google, link one or more Sheets, and export reviewed transactions there, with receipt images stored in Drive.
+
+## Hard parts
+
+**Asking for as little access as possible.** Slipio only uses Drive's per-file scope, so it can reach the sheets the user picked and nothing else. OAuth tokens stay on the server in encrypted HttpOnly cookies and are never exposed to client code.
+
+**Settings that follow the account.** Linked sheets and export settings are stored in PostgreSQL by Google's stable account ID. Signing in on another device restores them, and older cookie-based settings migrate automatically on the next request.
+
+**Keeping accounts apart.** The export logic and account isolation have automated tests, because a slip from one shop showing up in another shop's sheet would be the worst possible bug.

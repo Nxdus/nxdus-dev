@@ -1,0 +1,20 @@
+KRK Story is a control panel for a Minecraft community. Admins spin up server instances on demand, and players get the exact mods, resource packs and shaders for each server through a custom launcher.
+
+## Why
+
+Running several modded servers by hand meant SSH sessions, copied folders and players asking which mod version they needed. The aim was one website for the servers and one click for the players.
+
+## What I built
+
+- **Instance lifecycle:** spawn, start, stop, restart and remove servers from the browser. Each instance is a Docker container built from images for Minecraft 1.12.2, 1.20.1 and 1.21.1.
+- **A file manager** for server files and configs, with an in-browser code editor.
+- **Packs for the launcher.** The launcher opens a deep link, fetches a pack manifest and downloads only the files it is missing.
+- **Roles** from guest to owner, controlling who can see the community pages and who can manage servers.
+
+## Hard parts
+
+**Talking to Docker safely.** The web app never touches Docker directly. Two small Express services handle files and instances, and only they hold the Docker socket. The Next.js app calls them after its own auth check.
+
+**Port allocation.** New instances take the first free port in a configured range, and that mapping is saved so a restart of the services doesn't lose track of running servers.
+
+**Trustworthy downloads.** Every file in a pack manifest carries the SHA-256 of the actual file on disk. The launcher compares hashes, so players only re-download what changed and corrupted files get replaced automatically.
