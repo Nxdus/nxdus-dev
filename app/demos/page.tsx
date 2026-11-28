@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -76,51 +75,54 @@ export default function DemosPage() {
           </EmptyContent>
         </Empty>
       ) : (
-        <div className="flex flex-col gap-6">
+        // Like antfu.me/demos: the grid is wider than the text column, newest first.
+        <div className="grid w-[min(76rem,calc(100vw-3rem))] grid-cols-[repeat(auto-fit,minmax(min(100%,20rem),24rem))] items-start justify-center gap-4 self-center">
           {sortedDemos.map((demo, i) => (
-            <Card key={demo.slug} className="reveal" style={order(i + 2)}>
+            <Card
+              key={demo.slug}
+              className="reveal pt-0 transition-transform duration-500 hover:z-10 hover:scale-[1.01]"
+              style={order(i + 2)}
+            >
+              <AspectRatio ratio={demo.ratio ?? 16 / 9} className="border-b">
+                <DemoVideo
+                  src={mediaUrl(demo.video)}
+                  poster={demo.poster ? mediaUrl(demo.poster) : undefined}
+                  title={demo.title}
+                />
+              </AspectRatio>
               <CardHeader>
                 <CardTitle>{demo.title}</CardTitle>
                 <CardDescription>{demo.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <AspectRatio ratio={demo.ratio ?? 16 / 9}>
-                  <DemoVideo
-                    src={mediaUrl(demo.video)}
-                    poster={demo.poster ? mediaUrl(demo.poster) : undefined}
-                    title={demo.title}
-                  />
-                </AspectRatio>
-              </CardContent>
-              <CardFooter className="flex-wrap gap-2">
+              <CardContent className="flex flex-wrap items-center gap-2">
                 <time dateTime={demo.date} className="text-muted-foreground tabular-nums">
                   {formatDate(demo.date)}
                 </time>
                 <Badge variant="outline">{demo.category}</Badge>
                 <div className="ml-auto flex gap-1">
-                {demo.links?.map((link) => {
-                  const external = link.href.startsWith("http");
-                  return (
-                    <Button
-                      key={link.href}
-                      variant="ghost"
-                      size="xs"
-                      nativeButton={false}
-                      render={
-                        external ? (
-                          <a href={link.href} target="_blank" rel="noreferrer" />
-                        ) : (
-                          <Link href={link.href} />
-                        )
-                      }
-                    >
-                      {link.label}
-                      <ArrowUpRightIcon data-icon="inline-end" />
-                    </Button>
-                  );
-                })}
+                  {demo.links?.map((link) => {
+                    const external = link.href.startsWith("http");
+                    return (
+                      <Button
+                        key={link.href}
+                        variant="ghost"
+                        size="xs"
+                        nativeButton={false}
+                        render={
+                          external ? (
+                            <a href={link.href} target="_blank" rel="noreferrer" />
+                          ) : (
+                            <Link href={link.href} />
+                          )
+                        }
+                      >
+                        {link.label}
+                        <ArrowUpRightIcon data-icon="inline-end" />
+                      </Button>
+                    );
+                  })}
                 </div>
-              </CardFooter>
+              </CardContent>
             </Card>
           ))}
         </div>
